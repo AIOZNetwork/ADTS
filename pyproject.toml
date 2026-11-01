@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dfl-framework"
+version = "0.1.0"
+description = "Decentralized Federated Learning Framework with Topology Server"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch==2.0.0",
+    "torchvision==0.15.1",
+    "flwr==1.7.0",
+    "grpcio==1.84.0",
+    "grpcio-tools==1.62.3",
+    "protobuf==4.25.9",
+    "pyyaml==6.0.3",
+    "numpy==1.26.4",
+    "pytz==2026.5",
+    "cvxpy==1.7.5",
+    "etcd3gw==2.7.0"
+]
+
+[project.scripts]
+dfl-node = "app.main:main"
+dfl-topology-server = "app.topology.main:serve"
+
+[tool.setuptools.packages.find]
+where = ["src"]

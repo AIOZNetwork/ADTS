@@ -1,0 +1,9 @@
+vir:
+  weight: 0.5
+  address: 10.0.0.144:9010
+cali:
+  weight: 0.5
+  address: 10.0.0.144:9011
+ore:
+  weight: 0.5
+  address: 10.0.0.144:9012
