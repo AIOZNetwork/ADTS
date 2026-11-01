@@ -1,11 +1,13 @@
-# DFL Framework
+# DFL Framework: Accelerated Deterministic Topology Scheduling (ADTS)
 
-Decentralized Federated Learning (DFL) framework for decentralized model training, topology orchestration, evaluation, and inference across silos.
+ADTS extends the Decentralized Federated Learning (DFL) framework with deterministic, role-aware scheduling and early fault-aware topology adaptation to accelerate decentralized FL under heterogeneous and dynamic conditions.
 
 ---
 
 # Features
 
+- **Accelerated Deterministic Topology Scheduling (ADTS):** Deterministic, role-aware scheduling with early fault-aware topology adaptation.
+- **etcd-based membership coordination:** Inspired by the etcd coordination mechanism used in NVIDIA Dynamo, nodes register their membership through etcd, while the topology server watches membership changes and updates the topology served to nodes.
 - Decentralized Federated Learning architecture
 - Dynamic topology generation
 - Multi-node training orchestration
@@ -13,6 +15,8 @@ Decentralized Federated Learning (DFL) framework for decentralized model trainin
 - Configurable graph-based communication
 - FastAPI-based training services
 - Modular node configuration
+
+For fault-aware topology adaptation, deploy etcd clients on the participating nodes and the topology-server host. Configure each node's `membership.etcd_host` and `membership.etcd_port`, and start the topology server with `--etcd-host` and `--etcd-port` pointing to the appropriate etcd endpoint. When membership changes, the topology server can regenerate the topology and notify connected nodes of the new version.
 
 ---
 
@@ -22,58 +26,6 @@ Decentralized Federated Learning (DFL) framework for decentralized model trainin
 cd aid-dfl-framework
 pip install -e .
 ```
-
----
-# Run Without Topology Server
-
-The framework can also run **without starting the topology server**. In this mode, each node loads a predefined communication graph from the configuration and begins training immediately. During training, nodes automatically exchange model updates with their neighbors according to the graph configuration.
-
-### 1. Disable Topology Service
-
-In each node configuration file (`node-i.yaml`), set:
-
-```yaml
-has_topology: false
-```
-
-### 2. Start a Node
-
-Run each node using its corresponding configuration:
-
-- Generate Topology Dynamically
-```bash
-PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/gaia/node-0.yaml --graph-mode generate   --graph-generation-config ./examples/MultigraphFL/custom_config/gaia/graph_generation_config.json --cluster-config ./examples/MultigraphFL/custom_config/gaia/cluster.yaml
-```
-
-- Load Existing Graph Topology
-```bash
-PYTHONPATH=. dfl-node \
-  --local-node-config ./examples/MultigraphFL/custom_config/gaia/node-0.yaml \
-  --graph-config ./examples/MultigraphFL/custom_config/gaia/graph.yaml \
-  --cluster-config ./examples/MultigraphFL/custom_config/gaia/cluster.yaml
-```
-
-Repeat the command for all nodes by replacing `node-0.yaml` with the corresponding node configuration (e.g., `node-1.yaml`, `node-2.yaml`, etc.).
-
-### Local Inference
-
-After training, you can perform inference locally on a node using a trained checkpoint. Only the checkpoint directory needs to be specified via `--weight-path`.
-
-```bash
-PYTHONPATH=. dfl-node \
-  --mode inference \
-  --weight-path checkpoints/100/ \
-  --input-dir debug/inputs/ \
-  --output-dir debug/outputs/
-```
-
-| Argument | Description |
-|----------|-------------|
-| `--weight-path` | Path to the trained model checkpoint directory. |
-| `--input-dir` | Directory containing input data for inference. |
-| `--output-dir` | Directory where inference results will be saved. |
-
----
 
 # Topology Server
 
