@@ -150,4 +150,6 @@ curl -X POST "http://localhost:8000/inference" \
 
 # License
 
-Internal / Proprietary
+This project is licensed under the MIT License.
+
+Copyright (c) 2026 AIOZ Network. See [LICENSE](./LICENSE) for the full license text.
