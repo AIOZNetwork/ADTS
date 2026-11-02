@@ -1,0 +1,66 @@
+ashburn:
+  weight: 0.5
+  address: 10.0.0.144:9010
+atlanta:
+  weight: 0.5
+  address: 10.0.0.144:9011
+boston:
+  weight: 0.5
+  address: 10.0.0.144:9012
+chicago:
+  weight: 0.5
+  address: 10.0.0.144:9013
+dallas:
+  weight: 0.5
+  address: 10.0.0.144:9014
+denver:
+  weight: 0.5
+  address: 10.0.0.177:9015
+hayward:
+  weight: 0.5
+  address: 10.0.0.177:9016
+jacksonville:
+  weight: 0.5
+  address: 10.0.0.177:9017
+losangeles:
+  weight: 0.5
+  address: 10.0.0.177:9018
+miamiflorida:
+  weight: 0.5
+  address: 10.0.0.177:9019
+minneapolis:
+  weight: 0.5
+  address: 10.0.0.183:9020
+montreal:
+  weight: 0.5
+  address: 10.0.0.183:9021
+newyork:
+  weight: 0.5
+  address: 10.0.0.183:9022
+newark:
+  weight: 0.5
+  address: 10.0.0.183:9023
+paloalto:
+  weight: 0.5
+  address: 10.0.0.183:9024
+phoenix:
+  weight: 0.5
+  address: 10.0.0.183:9025
+philadelphie:
+  weight: 0.5
+  address: 10.0.0.107:9026
+sanjos233:
+  weight: 0.5
+  address: 10.0.0.107:9027
+seattle:
+  weight: 0.5
+  address: 10.0.0.107:9028
+southbend:
+  weight: 0.5
+  address: 10.0.0.107:9029
+saintlouis:
+  weight: 0.5
+  address: 10.0.0.107:9030
+toronto:
+  weight: 0.5
+  address: 10.0.0.107:9031

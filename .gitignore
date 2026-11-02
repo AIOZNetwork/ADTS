@@ -185,5 +185,4 @@ test_dfl_env/*
 src/app/topology/custom_topology/data/*
 data/*
 results/*
-examples/MultigraphFL/custom_config/amazon_us/*
 test/*
