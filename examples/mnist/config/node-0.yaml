@@ -1,0 +1,20 @@
+node_id: node-0
+topology_url: 10.0.0.224:7000
+
+flower:
+  host: 0.0.0.0
+  port: 8080
+  rounds: 1
+  steps: 10
+  delay: 3
+  train_path: utils/data_split/train_part0
+  test_path: utils/data_split/test_part0
+
+peer:
+  host: 0.0.0.0
+  port: 9000
+  rounds: 10
+
+client:
+  module: examples.mnist.client
+  class: MyClient

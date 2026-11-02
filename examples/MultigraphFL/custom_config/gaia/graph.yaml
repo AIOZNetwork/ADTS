@@ -1,0 +1,18 @@
+'1':
+  vir:
+    recv_ids:
+    - cali
+    send_ids:
+    - cali
+  cali:
+    recv_ids:
+    - vir
+    - ore
+    send_ids:
+    - vir
+    - ore
+  ore:
+    recv_ids:
+    - cali
+    send_ids:
+    - cali
