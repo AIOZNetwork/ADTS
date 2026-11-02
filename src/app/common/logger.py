@@ -50,5 +50,5 @@ def custom_logger(app_name="APP"):
     logger_r.setLevel(logging.INFO)
     logger_r.addHandler(ch)
     return logger_r
-logger = custom_logger(app_name="DistributedFL")
+logger = custom_logger(app_name="DFL")
 logger.propagate = False

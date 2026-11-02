@@ -140,7 +140,7 @@ Example:
 {
   "model_size": 100000000.0,
   "num_rounds": 100,
-  "path_to_topology": "custom_data/gaia_3.gml"
+  "path_to_topology": "custom_data/gaia.gml"
 }
 ```
 

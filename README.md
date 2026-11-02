@@ -23,8 +23,14 @@ For fault-aware topology adaptation, deploy etcd clients on the participating no
 ### Install Framework Dependencies
 
 ```bash
-cd aid-dfl-framework
+cd ADTS/
 pip install -e .
+```
+
+# ETCD Server
+```bash
+cd ADTS/etcd_server
+docker compose up -d
 ```
 
 # Topology Server
@@ -34,23 +40,23 @@ The topology server is responsible for generating or loading communication graph
 ### Generate Topology Dynamically
 
 ```bash
-cd aid-dfl-framework
+cd ADTS/
 
 dfl-topology-server \
   --mode generate \
-  --graph-generation-config ./examples/MultigraphFL/custom_config/gaia/graph_generation_config.json \
-  --cluster-config ./examples/MultigraphFL/custom_config/gaia/cluster.yaml
+  --graph-generation-config ./examples/MultigraphFL/custom_config/amazon_us/graph_generation_config.json \
+  --cluster-config ./examples/MultigraphFL/custom_config/amazon_us/cluster.yaml
 ```
 
 ### Load Existing Graph Topology
 
 ```bash
-cd aid-dfl-framework
+cd ADTS/
 
 dfl-topology-server \
   --mode default \
-  --graph-config ./examples/MultigraphFL/custom_config/gaia/graph.yaml \
-  --cluster-config ./examples/MultigraphFL/custom_config/gaia/cluster.yaml
+  --graph-config ./examples/MultigraphFL/custom_config/amazon_us/graph.yaml \
+  --cluster-config ./examples/MultigraphFL/custom_config/amazon_us/cluster.yaml
 ```
 
 ---
@@ -62,11 +68,12 @@ Each silo represents an independent federated learning participant.
 ### Example
 
 ```bash
-cd aid-dfl-framework
+cd ADTS/
 
-PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/gaia/node-0.yaml
-PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/gaia/node-1.yaml
-PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/gaia/node-2.yaml
+PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-0.yaml
+PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-1.yaml
+...
+PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-21.yaml
 ```
 
 > Run each node in a separate terminal session or container.
@@ -78,7 +85,7 @@ PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/
 Start the FastAPI training service:
 
 ```bash
-cd aid-dfl-framework/src/app/user
+cd ADTS/src/app/user
 
 uvicorn api:app --host 0.0.0.0 --port 8000
 ```
