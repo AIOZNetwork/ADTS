@@ -332,8 +332,11 @@ class TopologyServer(topology_pb2_grpc.TopologyServiceServicer):
     ) -> Iterator[topology_pb2.TrainingTrigger]:
         """Stream training triggers from the node's queue."""
         q = self.trigger_queues[request.node_id]
-        while True:
-            trigger = q.get()
+        while context.is_active():
+            try:
+                trigger = q.get(timeout=0.5)
+            except Empty:
+                continue
             yield trigger
 
     # User-triggered broadcast

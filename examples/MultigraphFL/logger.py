@@ -59,5 +59,5 @@ def custom_logger(app_name="APP"):
     fh.setFormatter(CustomFormatter())
     logger_r.addHandler(fh)
     return logger_r
-logger = custom_logger(app_name="DistributedFL")
+logger = custom_logger(app_name="DFL")
 logger.propagate = False

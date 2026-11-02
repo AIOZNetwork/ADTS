@@ -1,0 +1,8 @@
+services:
+  etcd-server:
+    image: bitnamilegacy/etcd:3.6.1
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - 2379:2379  # this port exposes the /metrics endpoint
+      - 2380:2380
