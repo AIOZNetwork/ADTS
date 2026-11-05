@@ -178,6 +178,7 @@ data/*
 *.pt
 utils/*
 examples/autonomous_driving/data/*
+examples/MultigraphFL/custom_config/amazon_us_ori/*
 benchmark/*
 *.npz
 logs/*

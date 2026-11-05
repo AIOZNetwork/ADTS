@@ -1,70 +1,32 @@
 import os
-import re
 import uuid
 import yaml
 import json
 import networkx as nx
 from app.common.logger import logger
 from app.topology.custom_topology.convert_gml_to_dfl_multigraph_format import get_multi_network, convert_multigraph_to_dfl_format, topology_to_yaml
-from app.topology.custom_topology.utils.utils import get_connectivity_graph, get_ring_overlay, generate_multigraph
+from app.topology.custom_topology.utils.utils import get_connectivity_graph, get_ring_overlay, generate_multigraph, convert_id_to_name
 from app.topology.custom_topology.constants import TOPOLOGY_NAME, EXPERIMENT, LOCAL_STEPS, ARCH, T_MAX
-
-def update_yaml_names(gml_path, yaml_path, output_path):
-    with open(gml_path, "r", encoding="utf-8") as f:
-        gml_content = f.read()
-
-    id_to_name = {
-        int(node_id): name
-        for node_id, name in re.findall(
-            r'node\s*\[\s*id\s+(\d+).*?name\s+"([^"]+)"',
-            gml_content,
-            re.DOTALL
-        )
-    }
-
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-
-    def replace_names(obj):
-        if isinstance(obj, dict):
-            return {
-                id_to_name.get(int(k[5:]), k) if isinstance(k, str)
-                and k.startswith("node-") and k[5:].isdigit()
-                else k: replace_names(v)
-                for k, v in obj.items()
-            }
-        elif isinstance(obj, list):
-            return [
-                id_to_name.get(int(item[5:]), item)
-                if isinstance(item, str) and item.startswith("node-")
-                and item[5:].isdigit()
-                else replace_names(item)
-                for item in obj
-            ]
-        return obj
-
-    updated_data = replace_names(data)
-
-    with open(output_path, "w", encoding="utf-8") as f:
-        yaml.safe_dump(updated_data, f, sort_keys=False, allow_unicode=True)
 
 def generate_network_multigraph(
         root: str = "./results", 
         json_path: str = 'topology_generation_config.json',
         active_nodes: set[str] | None = None,
     ):
-    arch = ARCH
-    t_max = T_MAX
-    name = TOPOLOGY_NAME
-    experiment = EXPERIMENT
-    local_steps = LOCAL_STEPS
+    arch = ARCH # "ring"
+    t_max = T_MAX # maximum number of edges, ex: t_max = 2
+    name = TOPOLOGY_NAME # "amazon_us"
+    experiment = EXPERIMENT # "femnist"
+    local_steps = LOCAL_STEPS # number of local steps, ex: local_steps = 1
     
     uuid_str = str(uuid.uuid4())
     root = os.path.join(root, uuid_str)
     with open(json_path, 'r') as file:
         topology_generation_config = json.load(file)
 
+    # Size of the model that will be transmitted on the network in bit, ex: model_size = 1e8
     model_size = topology_generation_config["model_size"]
+    # Total number of training rounds, ex: num_rounds = 6400
     num_rounds = topology_generation_config["num_rounds"]
     path_to_topology = topology_generation_config["path_to_topology"]
 
@@ -102,9 +64,9 @@ def generate_network_multigraph(
     download_delay = {}
     computation_time_dict = {}
     for node, data in underlay.nodes(data=True):
-        upload_capacity = data["upload"]
-        download_capacity = data["download"]
-        computation_time = data["computation"]
+        upload_capacity = data["upload"] # upload bandwidth (node) in bits per second
+        download_capacity = data["download"] # download bandwidth (node) in bits per second
+        computation_time = data["computation"] # Time taken by the model to perform one local update / one training step 
         upload_delay[node] = (model_size / upload_capacity) * 1e3
         download_delay[node] = (model_size / download_capacity) * 1e3
         computation_time_dict[node] = local_steps * computation_time
@@ -140,7 +102,7 @@ def generate_network_multigraph(
             default_flow_style=False
         )
 
-    update_yaml_names(os.path.join(result_dir_ring, "ring_0.gml"), yaml_path, yaml_path)
+    convert_id_to_name(os.path.join(result_dir_ring, "ring_0.gml"), yaml_path, yaml_path)
 
     return yaml_path
 

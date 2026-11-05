@@ -1,4 +1,6 @@
 import os
+import re
+import yaml
 import csv
 import shutil
 import random
@@ -469,3 +471,42 @@ def delay_time_computation_old(computation_time, data, upload_delay, download_de
                                                   download_delay,
                                                   model_size / data["availableBandwidth"])
     return weight
+
+def convert_id_to_name(gml_path, yaml_path, output_path):
+    with open(gml_path, "r", encoding="utf-8") as f:
+        gml_content = f.read()
+
+    id_to_name = {
+        int(node_id): name
+        for node_id, name in re.findall(
+            r'node\s*\[\s*id\s+(\d+).*?name\s+"([^"]+)"',
+            gml_content,
+            re.DOTALL
+        )
+    }
+
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+
+    def replace_names(obj):
+        if isinstance(obj, dict):
+            return {
+                id_to_name.get(int(k[5:]), k) if isinstance(k, str)
+                and k.startswith("node-") and k[5:].isdigit()
+                else k: replace_names(v)
+                for k, v in obj.items()
+            }
+        elif isinstance(obj, list):
+            return [
+                id_to_name.get(int(item[5:]), item)
+                if isinstance(item, str) and item.startswith("node-")
+                and item[5:].isdigit()
+                else replace_names(item)
+                for item in obj
+            ]
+        return obj
+
+    updated_data = replace_names(data)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        yaml.safe_dump(updated_data, f, sort_keys=False, allow_unicode=True)
