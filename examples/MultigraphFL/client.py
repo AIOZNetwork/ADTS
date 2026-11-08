@@ -75,6 +75,7 @@ class MyClient(DFLClient):
 
         #save ckpt
         if self.server_round % self.ckpt_round == 0:
+            self.checkpoint_dir = Path(self.ckpt_root) / f"{self.server_round}"
             ckpt_path = (self.checkpoint_dir / f"{self.node_id}.pt")
             ckpt_path.parent.mkdir(parents=True, exist_ok=True)
             torch.save(self.model.net.state_dict(), ckpt_path)

@@ -4,5 +4,5 @@
   "download_capacity": 10000000000.0,
   "default_capacity": 1000000000.0,
   "num_rounds": 100,
-  "path_to_topology": "data/custom/gaia_3.gml"
+  "path_to_underlay": "custom_data/gaia.gml"
 }

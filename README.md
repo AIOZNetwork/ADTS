@@ -4,6 +4,14 @@ ADTS extends the Decentralized Federated Learning (DFL) framework with determini
 
 ---
 
+## Using DFL Framework in Your Project
+
+Before running the framework for your own project, follow the
+[User Guide](./user_guide.md) to configure your nodes and communication topology,
+and implement a client tailored to your model and dataset.
+
+---
+
 # Features
 
 - **Accelerated Deterministic Topology Scheduling (ADTS):** Deterministic, role-aware scheduling with early fault-aware topology adaptation.

@@ -22,7 +22,6 @@ class ClientAdapter(fl.client.NumPyClient):
     ) -> Tuple[list[np.ndarray], int, Dict[str, Any]]:
         self.user_client.node_id = self.node_id
         self.user_client.training_round = config["training_round"]
-        self.user_client.checkpoint_dir = (Path(self.ckpt_root) / str(self.user_client.training_round))
         self.user_client.set_parameters(parameters)
         params, num_examples, metrics = self.user_client.fit(parameters, config)
         return params, num_examples, metrics

@@ -1,4 +1,6 @@
-# DFL Framework User Guide
+# User Guide
+
+This guide explains how to configure and extend a project built with the DFL Framework. It covers the project structure, node and cluster configuration, communication graph setup (including `.gml` topology files), and implementation of a custom client for training and inference.
 
 ## Project Structure
 
@@ -26,15 +28,15 @@ Each node in the DFL framework is configured through a `node-i.yaml` file.
 Example:
 
 ```yaml
-node_id: node-0
+node_id: ashburn
 # Whether to obtain the communication topology from a topology server
-has_topology: false
+has_topology: true
 # Address of the topology server (used only when has_topology=true)
-topology_url: 10.0.0.224:7000
+topology_url: 10.0.0.144:7000
 flower:
   # Optional artificial communication delay (seconds)
   delay:
-  # Optional node name
+  # Optional experiment name
   name:
   # Local training batch size
   batch_size: 128
@@ -45,9 +47,9 @@ flower:
   # Save a checkpoint every N rounds
   ckpt_round: 100
   # Training dataset
-  train_path: benchmark/MultigraphFL/data/femnist/gaia/train/0.pkl
+  train_path: benchmark/MultigraphFL/data/femnist/amazon_us/train/0.pkl
   # Validation/Test dataset
-  test_path: benchmark/MultigraphFL/data/femnist/gaia/test/test.pkl
+  test_path: benchmark/MultigraphFL/data/femnist/amazon_us/test/test.pkl
 
 peer:
   # Address for this node's peer service
@@ -71,13 +73,7 @@ client:
 > ```python
 > self.ckpt_root = config["flower"]["ckpt_root"]
 > ```
-> The framework uses this value to initialize the checkpoint directory for the current node. When saving checkpoints inside the client, **always use** `self.checkpoint_dir` instead of `self.ckpt_root`.
-
-Example:
-```python
-if current_round % config["flower"]["ckpt_round"] == 0:
-    self.model.save(self.checkpoint_dir / f"{self.node_id}.pth")
-```
+> The framework uses this value to initialize the checkpoint directory for the current node.
 
 ---
 
@@ -89,23 +85,23 @@ Example:
 
 ```yaml
 '1':
-  node-0:
+  ashburn:
     recv_ids:
-    - node-1
+    - atlanta
     send_ids:
-    - node-1
-  node-1:
+    - atlanta
+  atlanta:
     recv_ids:
-    - node-0
-    - node-2
+    - ashburn
+    - boston
     send_ids:
-    - node-0
-    - node-2
-  node-2:
+    - ashburn
+    - boston
+  boston:
     recv_ids:
-    - node-1
+    - atlanta
     send_ids:
-    - node-1
+    - atlanta
 ```
 
 ---
@@ -117,15 +113,15 @@ Defines the addresses, weights of all nodes in the cluster.
 Example:
 
 ```yaml
-node-0:
+ashburn:
   weight: 0.5
-  address: 10.0.0.224:9010
-node-1:
+  address: 10.0.0.145:9010
+atlanta:
   weight: 0.5
-  address: 10.0.0.224:9011
-node-2:
+  address: 10.0.0.146:9011
+boston:
   weight: 0.5
-  address: 10.0.0.224:9012
+  address: 10.0.0.147:9012
 ```
 
 ---
@@ -140,7 +136,7 @@ Example:
 {
   "model_size": 100000000.0,
   "num_rounds": 100,
-  "path_to_topology": "custom_data/gaia.gml"
+  "path_to_underlay": "custom_data/amazon_us.gml"
 }
 ```
 
@@ -148,10 +144,61 @@ Example:
 |-------|------|-------------|
 | `model_size` | `float` | Model size in **bits**. This value is calculated as the number of model parameters multiplied by the size of the parameter data type. |
 | `num_rounds` | `int` | Number of federated training rounds used for topology generation/simulation. |
-| `path_to_topology` | `str` | Path to the topology file containing the communication graph definition. The file can be a graph format such as `.gml`. |
+| `path_to_underlay` | `str` | Path to the underlay_graph file containing the initial network infrastructure. The file can be a graph format such as `.gml`. |
 
 
 If this file exists, the framework generates the communication graph based on the provided configuration instead of using the default graph.
+
+### Topology file (`.gml`)
+
+The file specified by `path_to_underlay` defines the graph in GML format. It contains a `graph` block with one `node` block for each node and an `edge` block for each connection between nodes.
+
+```gml
+graph [
+  node [
+    id 0
+    label "Ashburn"
+    name "ashburn"
+    upload 751496
+    download 1017448
+    computation 4.6
+  ]
+  node [
+    id 1
+    label "Atlanta"
+    name "atlanta"
+    upload 751496
+    download 1017448
+    computation 4.6
+  ]
+  edge [
+    source 0
+    target 1
+    distance 853.092138569981
+    capacity 1000000000.0
+  ]
+]
+```
+
+Node fields:
+
+| Field | Description |
+|-------|-------------|
+| `id` | Node no. |
+| `label` | Human-readable node label. |
+| `name` | Node name used as `node_id` in `node-i.yaml`, where `i` is the node no. For example, `name "ashburn"` with node no. `0` corresponds to `node-0.yaml` containing `node_id: ashburn`. |
+| `upload` | Node upload bandwidth in bits per second (bit/s). |
+| `download` | Node download bandwidth in bits per second (bit/s). |
+| `computation` | Time for the model to perform one local update, in milliseconds (ms). |
+
+Edge fields:
+
+| Field | Description |
+|-------|-------------|
+| `source` | node no. of the source node. |
+| `target` | node no. of the target node. |
+| `distance` | Distance between the two nodes in kilometers (km). |
+| `capacity` | Bandwidth between the two nodes in bits per second (bit/s). |
 
 ---
 

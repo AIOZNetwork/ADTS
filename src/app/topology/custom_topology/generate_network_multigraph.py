@@ -28,7 +28,7 @@ def generate_network_multigraph(
     model_size = topology_generation_config["model_size"]
     # Total number of training rounds, ex: num_rounds = 6400
     num_rounds = topology_generation_config["num_rounds"]
-    path_to_topology = topology_generation_config["path_to_topology"]
+    path_to_underlay = topology_generation_config["path_to_underlay"]
 
     result_dir = os.path.join(root, name, experiment)
     if not os.path.exists(result_dir):
@@ -36,7 +36,7 @@ def generate_network_multigraph(
 
     logger.info(f"===== Multigraph: {experiment} dataset - {name} network =====")
 
-    underlay = nx.read_gml(path_to_topology)
+    underlay = nx.read_gml(path_to_underlay)
     node_names = [data["name"] for node, data in underlay.nodes(data=True)]
     node_labels = {
         data["name"]: node
