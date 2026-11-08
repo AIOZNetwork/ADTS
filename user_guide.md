@@ -2,6 +2,25 @@
 
 This guide explains how to configure and extend a project built with the DFL Framework. It covers the project structure, node and cluster configuration, communication graph setup (including `.gml` topology files), and implementation of a custom client for training and inference.
 
+## Contents
+
+- [Project Structure](#project-structure)
+- [Configuration Files](#configuration-files)
+  - [`configs/node-i.yaml`](#configsnode-iyaml)
+  - [`configs/graph.yaml`](#configsgraphyaml)
+  - [`configs/cluster.yaml`](#configsclusteryaml)
+  - [`configs/graph_generation_config.json`](#configsgraph_generation_configjson)
+  - [Underlay file (`.gml`)](#underlay-file-gml)
+- [Implementing `client.py`](#implementing-clientpy)
+  - [`__init__`](#__init__)
+  - [`get_parameters`](#get_parameters)
+  - [`set_parameters`](#set_parameters)
+  - [`fit`](#fit)
+  - [`evaluate`](#evaluate)
+  - [`inference`](#inference)
+  - [`run_inference`](#run_inference)
+- [Implementation Checklist](#implementation-checklist)
+
 ## Project Structure
 
 A project using the DFL Framework should follow the structure below:
