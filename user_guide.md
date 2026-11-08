@@ -149,7 +149,7 @@ Example:
 
 If this file exists, the framework generates the communication graph based on the provided configuration instead of using the default graph.
 
-### Topology file (`.gml`)
+### Underlay file (`.gml`)
 
 The file specified by `path_to_underlay` defines the graph in GML format. It contains a `graph` block with one `node` block for each node and an `edge` block for each connection between nodes.
 
