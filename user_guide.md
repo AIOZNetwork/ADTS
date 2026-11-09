@@ -19,7 +19,6 @@ This guide explains how to configure and extend a project built with the DFL Fra
   - [`evaluate`](#evaluate)
   - [`inference`](#inference)
   - [`run_inference`](#run_inference)
-- [Implementation Checklist](#implementation-checklist)
 
 ## Project Structure
 
@@ -221,7 +220,7 @@ Edge fields:
 
 ---
 
-# Implementing `client.py`
+## Implementing `client.py`
 
 Users must implement a client class that inherits from `DFLClient`.
 
@@ -236,13 +235,13 @@ The framework will invoke the methods below during training and inference.
 
 ---
 
-## `__init__`
+### `__init__`
 
 ```python
 def __init__(self, config: dict):
 ```
 
-### Purpose
+#### Purpose
 
 Initialize all resources required by the node, including:
 
@@ -282,7 +281,7 @@ class Client(DFLClient):
 
 ---
 
-## `get_parameters`
+### `get_parameters`
 
 ```python
 def get_parameters(self, config: Dict[str, Any]) -> list[np.ndarray]:
@@ -294,7 +293,7 @@ These parameters will be exchanged with neighboring nodes during distributed fed
 
 ---
 
-## `set_parameters`
+### `set_parameters`
 
 ```python
 def set_parameters(self, parameters: list[np.ndarray]) -> None:
@@ -304,7 +303,7 @@ Loads model parameters received from the framework into the local model.
 
 ---
 
-## `fit`
+### `fit`
 
 ```python
 def fit(self, parameters: list[np.ndarray], config: Dict[str, Any]) -> Tuple[list[np.ndarray], int, Dict[str, Any]]
@@ -344,7 +343,7 @@ return (self.get_parameters({}), len(self.train_loader.dataset),
 
 ---
 
-## `evaluate`
+### `evaluate`
 
 ```python
 def evaluate(self, parameters: list[np.ndarray], config: Dict[str, Any]) -> Tuple[float, int, Dict[str, Any]]
@@ -368,7 +367,7 @@ return (loss, len(self.test_loader.dataset),
 
 ---
 
-## `inference`
+### `inference`
 
 ```python
 def inference(self, parameters: list[np.ndarray], inputs: bytes) -> np.ndarray:
@@ -391,7 +390,7 @@ containing the prediction results.
 
 ---
 
-## `run_inference`
+### `run_inference`
 
 ```python
 def run_inference(self, weight_path: Path, input_path: Path, output_path: Path) -> None:
@@ -413,23 +412,3 @@ Typical workflow:
 2. Read input data from `input_path`.
 3. Run inference.
 4. Save predictions to `output_path`.
-
----
-
-# Implementation Checklist
-
-Before running the DFL Framework, ensure that:
-
-- [ ] A `configs/` directory exists.
-- [ ] `node-i.yaml` is created for every node.
-- [ ] `cluster.yaml` is provided.
-- [ ] `graph.yaml` is provided, or `graph_generation_config.json` is available for automatic graph generation.
-- [ ] `client.py` implements a class that inherits from `DFLClient`.
-    - [ ] `__init__` initializes the model, optimizer, and DataLoaders.
-        - [ ] `self.ckpt_root = config["flower"]["ckpt_root"]` is set correctly.
-    - [ ] `get_parameters()` is implemented.
-    - [ ] `set_parameters()` is implemented.
-    - [ ] `fit()` is implemented.
-    - [ ] `evaluate()` is implemented.
-    - [ ] `inference()` is implemented.
-    - [ ] `run_inference()` is implemented.
