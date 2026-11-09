@@ -21,7 +21,7 @@ ADTS extends the Decentralized Federated Learning (DFL) framework with determini
 
 ---
 
-# Using DFL Framework in Your Project
+## Using DFL Framework in Your Project
 
 Before running the framework for your own project, follow the
 [User Guide](./user_guide.md) to configure your nodes and communication topology,
@@ -29,7 +29,7 @@ and implement a client tailored to your model and dataset.
 
 ---
 
-# Features
+## Features
 
 - **Accelerated Deterministic Topology Scheduling (ADTS):** Deterministic, role-aware scheduling with early fault-aware topology adaptation.
 - **etcd-based membership coordination:** Inspired by the etcd coordination mechanism used in NVIDIA Dynamo, nodes register their membership through etcd, while the topology server watches membership changes and updates the topology served to nodes.
@@ -45,20 +45,20 @@ For fault-aware topology adaptation, deploy etcd clients on the participating no
 
 ---
 
-# Install Framework Dependencies
+## Install Framework Dependencies
 
 ```bash
 cd ADTS/
 pip install -e .
 ```
 
-# ETCD Server
+## ETCD Server
 ```bash
 cd ADTS/etcd_server
 docker compose up -d
 ```
 
-# Topology Server
+## Topology Server
 
 The topology server is responsible for generating or loading communication graphs for training.
 
@@ -86,7 +86,7 @@ dfl-topology-server \
 
 ---
 
-# Start DFL Nodes (Silos)
+## Start DFL Nodes (Silos)
 
 Each silo represents an independent federated learning participant.
 
@@ -105,7 +105,7 @@ PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/
 
 ---
 
-# Training API Service (use when run with topology server)
+## Training API Service (use when run with topology server)
 
 Start the FastAPI training service:
 
@@ -124,7 +124,7 @@ After startup:
 
 ---
 
-# Training
+## Training
 
 Trigger training:
 
@@ -141,7 +141,7 @@ curl -X 'POST' \
 
 ---
 
-# Evaluation
+## Evaluation
 
 Evaluate a trained model on selected nodes.
 
@@ -160,7 +160,7 @@ curl -X POST "http://localhost:8000/evaluate" \
 
 ---
 
-# Inference
+## Inference
 
 Run inference using a trained model.
 
@@ -180,7 +180,7 @@ curl -X POST "http://localhost:8000/inference" \
 
 ---
 
-# License
+## License
 
 This project is licensed under the MIT License.
 
