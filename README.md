@@ -9,11 +9,8 @@ ADTS extends the Decentralized Federated Learning (DFL) framework with determini
 - [Install Framework Dependencies](#install-framework-dependencies)
 - [ETCD Server](#etcd-server)
 - [Topology Server](#topology-server)
-  - [Generate Topology Dynamically](#generate-topology-dynamically)
-  - [Load Existing Graph Topology](#load-existing-graph-topology)
 - [Start DFL Nodes (Silos)](#start-dfl-nodes-silos)
 - [Training API Service](#training-api-service-use-when-run-with-topology-server)
-  - [API Documentation](#api-documentation)
 - [Training](#training)
 - [Evaluation](#evaluation)
 - [Inference](#inference)
@@ -21,7 +18,7 @@ ADTS extends the Decentralized Federated Learning (DFL) framework with determini
 
 ---
 
-# Using DFL Framework in Your Project
+## Using DFL Framework in Your Project
 
 Before running the framework for your own project, follow the
 [User Guide](./user_guide.md) to configure your nodes and communication topology,
@@ -29,7 +26,7 @@ and implement a client tailored to your model and dataset.
 
 ---
 
-# Features
+## Features
 
 - **Accelerated Deterministic Topology Scheduling (ADTS):** Deterministic, role-aware scheduling with early fault-aware topology adaptation.
 - **etcd-based membership coordination:** Inspired by the etcd coordination mechanism used in NVIDIA Dynamo, nodes register their membership through etcd, while the topology server watches membership changes and updates the topology served to nodes.
@@ -45,24 +42,24 @@ For fault-aware topology adaptation, deploy etcd clients on the participating no
 
 ---
 
-# Install Framework Dependencies
+## Install Framework Dependencies
 
 ```bash
 cd ADTS/
 pip install -e .
 ```
 
-# ETCD Server
+## ETCD Server
 ```bash
 cd ADTS/etcd_server
 docker compose up -d
 ```
 
-# Topology Server
+## Topology Server
 
 The topology server is responsible for generating or loading communication graphs for training.
 
-### Generate Topology Dynamically
+- Generate Topology Dynamically
 
 ```bash
 cd ADTS/
@@ -73,7 +70,7 @@ dfl-topology-server \
   --cluster-config ./examples/MultigraphFL/custom_config/amazon_us/cluster.yaml
 ```
 
-### Load Existing Graph Topology
+- Load Existing Graph Topology
 
 ```bash
 cd ADTS/
@@ -86,11 +83,11 @@ dfl-topology-server \
 
 ---
 
-# Start DFL Nodes (Silos)
+## Start DFL Nodes (Silos)
 
 Each silo represents an independent federated learning participant.
 
-### Example
+- Example
 
 ```bash
 cd ADTS/
@@ -99,13 +96,12 @@ PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/
 PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-1.yaml
 ...
 PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-21.yaml
+# Run each node in a separate terminal session or container.
 ```
-
-> Run each node in a separate terminal session or container.
 
 ---
 
-# Training API Service (use when run with topology server)
+## Training API Service (use when run with topology server)
 
 Start the FastAPI training service:
 
@@ -115,16 +111,9 @@ cd ADTS/src/app/user
 uvicorn api:app --host 0.0.0.0 --port 8000
 ```
 
-### API Documentation
-
-After startup:
-
-* Swagger UI: `http://localhost:8000/docs`
-* ReDoc: `http://localhost:8000/redoc`
-
 ---
 
-# Training
+## Training
 
 Trigger training:
 
@@ -141,11 +130,9 @@ curl -X 'POST' \
 
 ---
 
-# Evaluation
+## Evaluation
 
 Evaluate a trained model on selected nodes.
-
-### Request
 
 ```bash
 curl -X POST "http://localhost:8000/evaluate" \
@@ -160,11 +147,9 @@ curl -X POST "http://localhost:8000/evaluate" \
 
 ---
 
-# Inference
+## Inference
 
 Run inference using a trained model.
-
-### Request
 
 ```bash
 curl -X POST "http://localhost:8000/inference" \
@@ -180,7 +165,7 @@ curl -X POST "http://localhost:8000/inference" \
 
 ---
 
-# License
+## License
 
 This project is licensed under the MIT License.
 
