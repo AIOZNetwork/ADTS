@@ -84,7 +84,7 @@ client:
   class: MyClient
 ```
 
-### Notes
+#### Notes
 
 > **Important**
 > The client constructor **must** assign the checkpoint root:
