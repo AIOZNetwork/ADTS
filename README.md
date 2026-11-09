@@ -9,11 +9,8 @@ ADTS extends the Decentralized Federated Learning (DFL) framework with determini
 - [Install Framework Dependencies](#install-framework-dependencies)
 - [ETCD Server](#etcd-server)
 - [Topology Server](#topology-server)
-  - [Generate Topology Dynamically](#generate-topology-dynamically)
-  - [Load Existing Graph Topology](#load-existing-graph-topology)
 - [Start DFL Nodes (Silos)](#start-dfl-nodes-silos)
 - [Training API Service](#training-api-service-use-when-run-with-topology-server)
-  - [API Documentation](#api-documentation)
 - [Training](#training)
 - [Evaluation](#evaluation)
 - [Inference](#inference)
@@ -62,7 +59,7 @@ docker compose up -d
 
 The topology server is responsible for generating or loading communication graphs for training.
 
-### Generate Topology Dynamically
+- Generate Topology Dynamically
 
 ```bash
 cd ADTS/
@@ -73,7 +70,7 @@ dfl-topology-server \
   --cluster-config ./examples/MultigraphFL/custom_config/amazon_us/cluster.yaml
 ```
 
-### Load Existing Graph Topology
+- Load Existing Graph Topology
 
 ```bash
 cd ADTS/
@@ -90,7 +87,7 @@ dfl-topology-server \
 
 Each silo represents an independent federated learning participant.
 
-### Example
+- Example
 
 ```bash
 cd ADTS/
@@ -99,9 +96,8 @@ PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/
 PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-1.yaml
 ...
 PYTHONPATH=. dfl-node --local-node-config ./examples/MultigraphFL/custom_config/amazon_us/node-21.yaml
+# Run each node in a separate terminal session or container.
 ```
-
-> Run each node in a separate terminal session or container.
 
 ---
 
@@ -114,13 +110,6 @@ cd ADTS/src/app/user
 
 uvicorn api:app --host 0.0.0.0 --port 8000
 ```
-
-### API Documentation
-
-After startup:
-
-* Swagger UI: `http://localhost:8000/docs`
-* ReDoc: `http://localhost:8000/redoc`
 
 ---
 
@@ -145,8 +134,6 @@ curl -X 'POST' \
 
 Evaluate a trained model on selected nodes.
 
-### Request
-
 ```bash
 curl -X POST "http://localhost:8000/evaluate" \
   -H 'accept: */*' \
@@ -163,8 +150,6 @@ curl -X POST "http://localhost:8000/evaluate" \
 ## Inference
 
 Run inference using a trained model.
-
-### Request
 
 ```bash
 curl -X POST "http://localhost:8000/inference" \
