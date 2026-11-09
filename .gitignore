@@ -177,7 +177,9 @@ cython_debug/
 data/*
 *.pt
 utils/*
-examples/autonomous_driving/data/*
+examples/autonomous_driving/*
+examples/MultigraphFL/custom_config/amazon_us_ori/*
+examples/mnist/*
 benchmark/*
 *.npz
 logs/*

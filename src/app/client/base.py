@@ -10,7 +10,6 @@ class DFLClient(ABC):
     def __init__(self) -> None:
         self.node_id: str = ""
         self.training_round: int = 0 # Current training round
-        self.checkpoint_dir: Path | None = None
 
     @abstractmethod
     def get_parameters(self, config: Dict[str, Any]) -> list[np.ndarray]:

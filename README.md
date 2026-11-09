@@ -2,6 +2,31 @@
 
 ADTS extends the Decentralized Federated Learning (DFL) framework with deterministic, role-aware scheduling and early fault-aware topology adaptation to accelerate decentralized FL under heterogeneous and dynamic conditions.
 
+## Contents
+
+- [Using DFL Framework in Your Project](#using-dfl-framework-in-your-project)
+- [Features](#features)
+- [Install Framework Dependencies](#install-framework-dependencies)
+- [ETCD Server](#etcd-server)
+- [Topology Server](#topology-server)
+  - [Generate Topology Dynamically](#generate-topology-dynamically)
+  - [Load Existing Graph Topology](#load-existing-graph-topology)
+- [Start DFL Nodes (Silos)](#start-dfl-nodes-silos)
+- [Training API Service](#training-api-service-use-when-run-with-topology-server)
+  - [API Documentation](#api-documentation)
+- [Training](#training)
+- [Evaluation](#evaluation)
+- [Inference](#inference)
+- [License](#license)
+
+---
+
+# Using DFL Framework in Your Project
+
+Before running the framework for your own project, follow the
+[User Guide](./user_guide.md) to configure your nodes and communication topology,
+and implement a client tailored to your model and dataset.
+
 ---
 
 # Features
@@ -20,7 +45,7 @@ For fault-aware topology adaptation, deploy etcd clients on the participating no
 
 ---
 
-### Install Framework Dependencies
+# Install Framework Dependencies
 
 ```bash
 cd ADTS/
